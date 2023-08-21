@@ -1,0 +1,43 @@
+{
+  "name": "@aleios-cloud/eventbridge-toolbox-schema-generator",
+  "version": "0.0.6",
+  "description": "",
+  "main": "index.js",
+  "repository": "https://github.com/aleios-cloud/eventbridge-toolbox.git",
+  "scripts": {
+    "clean": "rimraf dist",
+    "lint-fix": "eslint . --ext=js,ts --fix",
+    "lint-test": "eslint . --ext=js,ts",
+    "build": "pnpm clean && tsc && cp src/doc-template.md dist/doc-template.md"
+  },
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "schema-generator": "./dist/generate-docs.js"
+  },
+  "type": "module",
+  "module": "./dist/generate-docs.js",
+  "types": "./dist/generate-docs.d.ts",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.4.5",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "dotenv": "^16.3.1",
+    "esbuild": "^0.18.17",
+    "eslint": "^8.43.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-import-resolver-typescript": "^3.5.5",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prefer-arrow": "^1.2.3",
+    "eslint-plugin-prettier": "^5.0.0",
+    "rimraf": "^5.0.1",
+    "ts-json-schema-generator": "^1.2.0",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.1.6"
+  }
+}

@@ -1,0 +1,11 @@
+# Node modules
+node_modules
+
+# CDK Output
+cdk.out
+
+# Environment Variables
+.env
+
+# Built Files
+dist
