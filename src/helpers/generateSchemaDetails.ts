@@ -8,7 +8,7 @@ import { SchemaDetails } from "../types.js";
 
 export const generateSchemaDetails = (
   pathToContractsFolder: string,
-  contractFilename: string,
+  contractFilename: string
 ): SchemaDetails => {
   const pathToContractFile = path.join(pathToContractsFolder, contractFilename);
 
@@ -20,7 +20,7 @@ export const generateSchemaDetails = (
   };
 
   const contractSchema = createGenerator(typeToSchemaConfig).createSchema(
-    typeToSchemaConfig.type,
+    typeToSchemaConfig.type
   );
 
   //TODO: validate that detailType would be a valid filename
@@ -28,9 +28,7 @@ export const generateSchemaDetails = (
     return {
       detailType: contractSchema.properties["detail-type"].const,
       detailVersion:
-        contractSchema.properties.detail.properties[
-          "detail-version"
-        ].const.toString(),
+        contractSchema.properties.detail.properties["detail-version"].const,
       schema: contractSchema,
     };
   } else {

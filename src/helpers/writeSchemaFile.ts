@@ -1,20 +1,20 @@
 import { writeFile } from "fs/promises";
 
-import { SchemaDetails } from "../types.js";
+import { ContractSchemaType } from "../types.js";
 
 export const writeSchemaFile = async (
   pathToContractDocumentationFolder: string,
-  schemaDetails: SchemaDetails,
+  schema: ContractSchemaType
 ): Promise<void> => {
   const jsonSchemaWhiteSpace = 2;
   const schemaString = JSON.stringify(
-    schemaDetails.schema,
+    schema,
     null,
-    jsonSchemaWhiteSpace,
+    jsonSchemaWhiteSpace
   );
 
   await writeFile(
     `${pathToContractDocumentationFolder}/schema.json`,
-    schemaString,
+    schemaString
   );
 };
