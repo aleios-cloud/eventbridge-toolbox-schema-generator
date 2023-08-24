@@ -1,14 +1,14 @@
-import { mkdirSync } from "fs";
 import { readdir } from "fs/promises";
 import path from "path";
 
 import { generateSchemaDetails } from "./helpers/generateSchemaDetails.js";
-import { writeIndexFile } from "./helpers/writeIndexFile.js";
-import { writeSchemaFile } from "./helpers/writeSchemaFile.js";
+
+import { SchemaDetails } from "./types.js";
+import { generateContractDocumentation } from "./helpers/generateContractDocumentation.js";
 
 //Note: contract file name must include term 'Contract' to be parsed
 const getContractFileNames = async (
-  pathToContracts: string,
+  pathToContracts: string
 ): Promise<string[]> => {
   const files = await readdir(pathToContracts);
 
@@ -17,34 +17,54 @@ const getContractFileNames = async (
 
 export const generateDocumentation = async (
   pathToContractsFolder: string,
-  pathToDocumentationFolder: string,
+  pathToDocumentationFolder: string
 ): Promise<void> => {
   const contractFileNames = await getContractFileNames(pathToContractsFolder);
+
+  let allContractDetails: SchemaDetails[] = [];
+
+  let newestVersionsRecords: Record<string, number> = {};
 
   for (const contractFileName of contractFileNames) {
     const { detailType, detailVersion, schema } = generateSchemaDetails(
       pathToContractsFolder,
-      contractFileName,
+      contractFileName
     );
+    allContractDetails.push({ detailType, detailVersion, schema });
 
-    const pathToContractDocumentationFolder = path.join(
-      `${pathToDocumentationFolder}/${detailType}/versioned/${detailVersion}`,
-    );
-
-    mkdirSync(pathToContractDocumentationFolder, { recursive: true });
-
-    await writeIndexFile(
-      pathToContractDocumentationFolder,
-      detailType,
-      detailVersion,
-    );
-
-    await writeSchemaFile(pathToContractDocumentationFolder, {
-      detailType,
-      detailVersion,
-      schema,
-    });
-
-    console.log(`Created docs for ${contractFileName}`);
+    if (detailType in newestVersionsRecords) {
+      const previousNewestContractVersionRecorded =
+        newestVersionsRecords[detailType];
+      if (previousNewestContractVersionRecorded < detailVersion) {
+        console.log("new contract");
+        newestVersionsRecords[detailType] = detailVersion;
+      }
+    } else {
+      console.log("unseen contract");
+      newestVersionsRecords[detailType] = detailVersion;
+    }
   }
+
+  allContractDetails.forEach((contractDetails) => {
+    if (
+      newestVersionsRecords[contractDetails.detailType] ==
+      contractDetails.detailVersion
+    ) {
+      const pathToContractDocumentationFolder = path.join(
+        `${pathToDocumentationFolder}/${contractDetails.detailType}`
+      );
+      generateContractDocumentation(
+        contractDetails,
+        pathToContractDocumentationFolder
+      );
+    } else {
+      const pathToContractDocumentationFolder = path.join(
+        `${pathToDocumentationFolder}/${contractDetails.detailType}/versioned/${contractDetails.detailVersion}`
+      );
+      generateContractDocumentation(
+        contractDetails,
+        pathToContractDocumentationFolder
+      );
+    }
+  });
 };
