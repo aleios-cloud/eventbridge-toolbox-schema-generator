@@ -4,7 +4,7 @@ import path from "path";
 import { generateSchemaDetails } from "./helpers/generateSchemaDetails.js";
 
 import { SchemaDetails } from "./types.js";
-import { generateContractDocumentation } from "./helpers/generateContractDocumentation.js";
+import { writeDocumentation } from "./helpers/writeDocumentation.js";
 
 //Note: contract file name must include term 'Contract' to be parsed
 export const getContractFileNames = async (
@@ -68,14 +68,14 @@ export const generateDocumentation = async (
         pathToDocumentationFolder,
         schemaDetails.detailType
       );
-      generateContractDocumentation(schemaDetails, newDocumentationFilePath);
+      writeDocumentation(schemaDetails, newDocumentationFilePath);
     } else {
       const oldDocumentationFilePath = getOldDocumentationFilePath(
         pathToDocumentationFolder,
         schemaDetails.detailType,
         schemaDetails.detailVersion
       );
-      generateContractDocumentation(schemaDetails, oldDocumentationFilePath);
+      writeDocumentation(schemaDetails, oldDocumentationFilePath);
     }
   });
 };

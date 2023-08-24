@@ -3,7 +3,7 @@ import { SchemaDetails } from "src/types.js";
 import { writeIndexFile } from "./writeIndexFile.js";
 import { writeSchemaFile } from "./writeSchemaFile.js";
 
-export const generateContractDocumentation = async (
+export const writeDocumentation = async (
   schemaDetails: SchemaDetails,
   pathToContractDocumentationFolder: string
 ) => {
