@@ -15,14 +15,27 @@ const getContractFileNames = async (
   return files.filter((fileName) => fileName.includes("Contract"));
 };
 
+const getOldDocumentationFilePath = (
+  pathToDocumentationFolder: string,
+  detailType: string,
+  detailVersion: number
+) =>
+  path.join(
+    `${pathToDocumentationFolder}/${detailType}/versioned/${detailVersion}`
+  );
+
+const getNewDocumentationFilePath = (
+  pathToDocumentationFolder: string,
+  detailType: string
+) => path.join(`${pathToDocumentationFolder}/${detailType}`);
+
 export const generateDocumentation = async (
   pathToContractsFolder: string,
   pathToDocumentationFolder: string
 ): Promise<void> => {
   const contractFileNames = await getContractFileNames(pathToContractsFolder);
 
-  let allContractDetails: SchemaDetails[] = [];
-
+  let allSchemaDetails: SchemaDetails[] = [];
   let newestVersionsRecords: Record<string, number> = {};
 
   for (const contractFileName of contractFileNames) {
@@ -30,41 +43,33 @@ export const generateDocumentation = async (
       pathToContractsFolder,
       contractFileName
     );
-    allContractDetails.push({ detailType, detailVersion, schema });
+    allSchemaDetails.push({ detailType, detailVersion, schema });
 
-    if (detailType in newestVersionsRecords) {
-      const previousNewestContractVersionRecorded =
-        newestVersionsRecords[detailType];
-      if (previousNewestContractVersionRecorded < detailVersion) {
-        console.log("new contract");
-        newestVersionsRecords[detailType] = detailVersion;
-      }
-    } else {
-      console.log("unseen contract");
+    if (
+      !(detailType in newestVersionsRecords) ||
+      newestVersionsRecords[detailType] < detailVersion
+    ) {
       newestVersionsRecords[detailType] = detailVersion;
     }
   }
 
-  allContractDetails.forEach((contractDetails) => {
-    if (
-      newestVersionsRecords[contractDetails.detailType] ==
-      contractDetails.detailVersion
-    ) {
-      const pathToContractDocumentationFolder = path.join(
-        `${pathToDocumentationFolder}/${contractDetails.detailType}`
+  allSchemaDetails.forEach((schemaDetails) => {
+    const newestVersionOfContract =
+      newestVersionsRecords[schemaDetails.detailType];
+
+    if (newestVersionOfContract == schemaDetails.detailVersion) {
+      const newDocumentationFilePath = getNewDocumentationFilePath(
+        pathToDocumentationFolder,
+        schemaDetails.detailType
       );
-      generateContractDocumentation(
-        contractDetails,
-        pathToContractDocumentationFolder
-      );
+      generateContractDocumentation(schemaDetails, newDocumentationFilePath);
     } else {
-      const pathToContractDocumentationFolder = path.join(
-        `${pathToDocumentationFolder}/${contractDetails.detailType}/versioned/${contractDetails.detailVersion}`
+      const oldDocumentationFilePath = getOldDocumentationFilePath(
+        pathToDocumentationFolder,
+        schemaDetails.detailType,
+        schemaDetails.detailVersion
       );
-      generateContractDocumentation(
-        contractDetails,
-        pathToContractDocumentationFolder
-      );
+      generateContractDocumentation(schemaDetails, oldDocumentationFilePath);
     }
   });
 };
