@@ -11,10 +11,7 @@ const { mockReaddir } = vi.hoisted(() => ({
 }));
 
 vi.mock("fs/promises", async () => {
-  const actualFs = await vi.importActual<object>("fs/promises");
-
   return {
-    ...actualFs,
     readdir: mockReaddir,
   };
 });
