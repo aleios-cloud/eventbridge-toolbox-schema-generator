@@ -6,6 +6,9 @@ import { createGenerator } from "ts-json-schema-generator";
 import { isValidJsonSchemaContract } from "./utils.js";
 import { SchemaDetails } from "../types.js";
 
+const isValidFileName = (detailType: string) =>
+  new RegExp("^[w,-]+$").test(detailType);
+
 export const generateSchemaDetails = (
   pathToContractsFolder: string,
   contractFilename: string
@@ -23,8 +26,11 @@ export const generateSchemaDetails = (
     typeToSchemaConfig.type
   );
 
-  //TODO: validate that detailType would be a valid filename
   if (isValidJsonSchemaContract(contractSchema)) {
+    if (!isValidFileName(contractSchema.properties["detail-type"].const)) {
+      throw `Contracts types error. Detail type for file ${contractFilename} must be a valid filename.`;
+    }
+    
     return {
       detailType: contractSchema.properties["detail-type"].const,
       detailVersion:
@@ -32,6 +38,6 @@ export const generateSchemaDetails = (
       schema: contractSchema,
     };
   } else {
-    throw "Contracts types are incorrect. A const value must be set for 'detail-type' and 'detail-version'.";
+    throw `Contracts types error. File ${contractFilename} does not contain a const value for both 'detail-type' and 'detail-version'.`;
   }
 };
