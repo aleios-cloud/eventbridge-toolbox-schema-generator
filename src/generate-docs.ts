@@ -7,12 +7,14 @@ import { SchemaDetails } from "./types.js";
 import { generateContractDocumentation } from "./helpers/generateContractDocumentation.js";
 
 //Note: contract file name must include term 'Contract' to be parsed
-const getContractFileNames = async (
+export const getContractFileNames = async (
   pathToContracts: string
 ): Promise<string[]> => {
   const files = await readdir(pathToContracts);
 
-  return files.filter((fileName) => fileName.includes("Contract"));
+  return files.filter((fileName) =>
+    fileName.toLowerCase().includes("contract")
+  );
 };
 
 const getOldDocumentationFilePath = (
@@ -45,7 +47,7 @@ export const generateDocumentation = async (
     );
     allSchemaDetails.push({ detailType, detailVersion, schema });
 
-    if(newestVersionsRecords[detailType] === detailVersion){
+    if (newestVersionsRecords[detailType] === detailVersion) {
       throw `Contracts types error. Multiple ${detailType} contracts have been assigned the same version.`;
     }
 
