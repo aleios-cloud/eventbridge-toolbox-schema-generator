@@ -6,8 +6,8 @@ import { createGenerator } from "ts-json-schema-generator";
 import { isValidJsonSchemaContract } from "./utils.js";
 import { SchemaDetails } from "../types.js";
 
-const isValidFileName = (detailType: string) =>
-  new RegExp("^[w,-]+$").test(detailType);
+export const isValidDirectoryName = (detailType: string) =>
+  new RegExp(/^[a-z0-9-_]+$/i).test(detailType);
 
 export const generateSchemaDetails = (
   pathToContractsFolder: string,
@@ -27,10 +27,10 @@ export const generateSchemaDetails = (
   );
 
   if (isValidJsonSchemaContract(contractSchema)) {
-    if (!isValidFileName(contractSchema.properties["detail-type"].const)) {
-      throw `Contracts types error. Detail type for file ${contractFilename} must be a valid filename.`;
+    if (!isValidDirectoryName(contractSchema.properties["detail-type"].const)) {
+      throw `Contracts types error. Detail type for file ${contractFilename} must be a valid directory name.`;
     }
-    
+
     return {
       detailType: contractSchema.properties["detail-type"].const,
       detailVersion:
