@@ -45,6 +45,10 @@ export const generateDocumentation = async (
     );
     allSchemaDetails.push({ detailType, detailVersion, schema });
 
+    if(newestVersionsRecords[detailType] === detailVersion){
+      throw "Contracts types are incorrect. Multiple contracts have been assigned the same version.";
+    }
+
     if (
       !(detailType in newestVersionsRecords) ||
       newestVersionsRecords[detailType] < detailVersion
