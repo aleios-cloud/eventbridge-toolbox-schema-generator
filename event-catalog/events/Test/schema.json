@@ -4,7 +4,7 @@
   "properties": {
     "detail-type": {
       "type": "string",
-      "const": "PersonRegisteredContract"
+      "const": "Test"
     },
     "detail": {
       "type": "object",
@@ -16,16 +16,12 @@
         "data": {
           "type": "object",
           "properties": {
-            "firstName": {
-              "type": "string"
-            },
-            "lastName": {
+            "test": {
               "type": "string"
             }
           },
           "required": [
-            "firstName",
-            "lastName"
+            "test"
           ],
           "additionalProperties": false
         }

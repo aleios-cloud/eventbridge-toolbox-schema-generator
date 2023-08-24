@@ -1,5 +1,5 @@
 ---
-name: PersonRegisteredContract
+name: Test
 version: 1
 summary: |
   A summary

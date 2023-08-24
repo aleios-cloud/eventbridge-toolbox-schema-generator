@@ -1,43 +1,42 @@
 module.exports = {
-  title: "EventCatalog",
-  tagline: "Discover, Explore and Document your Event Driven Architectures",
-  organizationName: "Your Company",
-  projectName: "Event Catalog",
-  editUrl:
-    "https://github.com/aleios-cloud/eventbridge-toolbox-schema-generator",
+  title: 'EventCatalog',
+  tagline: 'Discover, Explore and Document your Event Driven Architectures',
+  organizationName: 'Your Company',
+  projectName: 'Event Catalog',
+  editUrl: 'https://github.com/boyney123/eventcatalog-demo/edit/master',
   trailingSlash: true,
   primaryCTA: {
-    label: "Explore Events",
-    href: "/events",
+    label: 'Explore Events',
+    href: '/events'
   },
   secondaryCTA: {
-    label: "Getting Started",
-    href: "https://www.eventcatalog.dev/",
+    label: 'Getting Started',
+    href:"https://www.eventcatalog.dev/"
   },
   logo: {
-    alt: "EventCatalog Logo",
+    alt: 'EventCatalog Logo',
     // found in the public dir
-    src: "logo.svg",
+    src: 'logo.svg',
   },
-  footerLinks: [{ label: "Events", href: "/events" }],
+  footerLinks: [
+    { label: 'Events', href: '/events' },
+    { label: 'Services', href: '/services' },
+    { label: 'Visualiser', href: '/visualiser' },
+    { label: '3D Node Graph', href: '/overview' },
+    { label: 'GitHub', href: 'https://github.com/boyney123/eventcatalog-demo/edit/master' }
+  ],
   users: [
     {
-      id: "LukeY",
-      name: "Luke Yianni",
-      avatarUrl: "https://randomuser.me/api/portraits/lego/5.jpg",
-      role: "Architect",
+      id: 'dboyne',
+      name: 'David Boyne',
+      avatarUrl: 'https://pbs.twimg.com/profile_images/1262283153563140096/DYRDqKg6_400x400.png',
+      role: 'Developer',
     },
     {
-      id: "AprilB",
-      name: "April Bates",
-      avatarUrl: "https://randomuser.me/api/portraits/lego/9.jpg",
-      role: "Developer",
-    },
-    {
-      id: "RyanS",
-      name: "Ryan Schuller",
-      avatarUrl: "https://randomuser.me/api/portraits/lego/8.jpg",
-      role: "Developer",
+      id: 'mSmith',
+      name: 'Matthew Smith',
+      avatarUrl: 'https://randomuser.me/api/portraits/lego/3.jpg',
+      role: 'Developer',
     },
   ],
-};
+}
