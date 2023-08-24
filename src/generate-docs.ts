@@ -17,7 +17,7 @@ export const getContractFileNames = async (
   );
 };
 
-const getOldDocumentationFilePath = (
+export const getOldDocumentationFilePath = (
   pathToDocumentationFolder: string,
   detailType: string,
   detailVersion: number
@@ -26,7 +26,7 @@ const getOldDocumentationFilePath = (
     `${pathToDocumentationFolder}/${detailType}/versioned/${detailVersion}`
   );
 
-const getNewDocumentationFilePath = (
+export const getNewDocumentationFilePath = (
   pathToDocumentationFolder: string,
   detailType: string
 ) => path.join(`${pathToDocumentationFolder}/${detailType}`);
