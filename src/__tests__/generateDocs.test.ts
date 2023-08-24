@@ -3,7 +3,7 @@ import {
   generateDocumentation,
   getNewDocumentationFilePath,
   getOldDocumentationFilePath,
-} from "../generate-docs";
+} from "../generateDocs";
 import { generateAllContractInformation } from "../helpers/generateAllContractInformation";
 import { writeDocumentation } from "../helpers/writeDocumentation";
 
@@ -87,7 +87,8 @@ describe("Given a generate docs script", () => {
         "mockPathToDocumentationFolder"
       );
       expect(mockWriteDocumentation).toBeCalledWith(
-        mockSchemaDetails, `mockPathToDocumentationFolder/mockDetailTypeConst/versioned/10`
+        mockSchemaDetails,
+        `mockPathToDocumentationFolder/mockDetailTypeConst/versioned/10`
       );
     });
 
@@ -101,7 +102,8 @@ describe("Given a generate docs script", () => {
         "mockPathToDocumentationFolder"
       );
       expect(mockWriteDocumentation).toBeCalledWith(
-        mockSchemaDetails, `mockPathToDocumentationFolder/mockDetailTypeConst`
+        mockSchemaDetails,
+        `mockPathToDocumentationFolder/mockDetailTypeConst`
       );
     });
   });
