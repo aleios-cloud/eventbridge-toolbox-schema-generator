@@ -1,21 +1,8 @@
-import { readdir } from "fs/promises";
 import path from "path";
 
-import { generateSchemaDetails } from "./helpers/generateSchemaDetails.js";
-
-import { SchemaDetails } from "./types.js";
 import { writeDocumentation } from "./helpers/writeDocumentation.js";
+import { generateAllContractInformation } from "./helpers/generateAllContractInformation.js";
 
-//Note: contract file name must include term 'Contract' to be parsed
-export const getContractFileNames = async (
-  pathToContracts: string
-): Promise<string[]> => {
-  const files = await readdir(pathToContracts);
-
-  return files.filter((fileName) =>
-    fileName.toLowerCase().includes("contract")
-  );
-};
 
 export const getOldDocumentationFilePath = (
   pathToDocumentationFolder: string,
@@ -35,33 +22,12 @@ export const generateDocumentation = async (
   pathToContractsFolder: string,
   pathToDocumentationFolder: string
 ): Promise<void> => {
-  const contractFileNames = await getContractFileNames(pathToContractsFolder);
-
-  let allSchemaDetails: SchemaDetails[] = [];
-  let newestVersionsRecords: Record<string, number> = {};
-
-  for (const contractFileName of contractFileNames) {
-    const { detailType, detailVersion, schema } = generateSchemaDetails(
-      pathToContractsFolder,
-      contractFileName
-    );
-    allSchemaDetails.push({ detailType, detailVersion, schema });
-
-    if (newestVersionsRecords[detailType] === detailVersion) {
-      throw `Contracts types error. Multiple ${detailType} contracts have been assigned the same version.`;
-    }
-
-    if (
-      !(detailType in newestVersionsRecords) ||
-      newestVersionsRecords[detailType] < detailVersion
-    ) {
-      newestVersionsRecords[detailType] = detailVersion;
-    }
-  }
+  const { allSchemaDetails, newestVersionsRecord } =
+    await generateAllContractInformation(pathToContractsFolder);
 
   allSchemaDetails.forEach((schemaDetails) => {
     const newestVersionOfContract =
-      newestVersionsRecords[schemaDetails.detailType];
+      newestVersionsRecord[schemaDetails.detailType];
 
     if (newestVersionOfContract == schemaDetails.detailVersion) {
       const newDocumentationFilePath = getNewDocumentationFilePath(

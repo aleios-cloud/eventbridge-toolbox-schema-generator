@@ -1,41 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
-import { getContractFileNames, getNewDocumentationFilePath, getOldDocumentationFilePath } from "../generate-docs";
-
-const { mockReaddir } = vi.hoisted(() => ({
-  mockReaddir: vi.fn(),
-}));
-
-vi.mock("fs/promises", async () => {
-  const actualFs = await vi.importActual<object>("fs/promises");
-
-  return {
-    ...actualFs,
-    readdir: mockReaddir,
-  };
-});
+import { getNewDocumentationFilePath, getOldDocumentationFilePath } from "../generate-docs";
 
 describe("Given a generate docs script", () => {
-  describe("With function getContractFileNames to get files with a file name containing the term 'contract", () => {
-    it("Function returns empty array if no filenames found", async () => {
-      mockReaddir.mockResolvedValueOnce([]);
-
-      const result = await getContractFileNames(".");
-      expect(result).toStrictEqual([]);
-    });
-
-    it("Function returns array of only valid filenames", async () => {
-      mockReaddir.mockResolvedValueOnce([
-        "file.ts",
-        "fileContract.ts",
-        "contract.ts",
-        "con.tract",
-      ]);
-
-      const result = await getContractFileNames(".");
-      expect(result).toStrictEqual(["fileContract.ts", "contract.ts"]);
-    });
-  });
-
   describe("With function getNewDocumentationFilePath to generate filepaths", () => {
     it("Returns a filepath based on its input", async () => {
       expect(
@@ -61,24 +27,17 @@ describe("Given a generate docs script", () => {
       });
     });
 
-  describe("Which generates documentation from contract types", () => {
-    it("Function returns empty array if no filenames found", async () => {
-      mockReaddir.mockResolvedValueOnce([]);
-
-      const result = await getContractFileNames(".");
-      expect(result).toStrictEqual([]);
+    describe("With function compileContractInformation to compile information from the contracts", () => {
+      it("Returns schema details and newest version information for a set of contracts", async () => {
+        expect(
+          getOldDocumentationFilePath(
+            "mockPathToDocumentationFolder",
+            "mockDetailType",
+            100
+          )
+        ).toStrictEqual(
+          "mockPathToDocumentationFolder/mockDetailType/versioned/100"
+        );
+      });
     });
-
-    it("Function returns array of only valid filenames", async () => {
-      mockReaddir.mockResolvedValueOnce([
-        "file.ts",
-        "fileContract.ts",
-        "contract.ts",
-        "con.tract",
-      ]);
-
-      const result = await getContractFileNames(".");
-      expect(result).toStrictEqual(["fileContract.ts", "contract.ts"]);
-    });
-  });
 });
