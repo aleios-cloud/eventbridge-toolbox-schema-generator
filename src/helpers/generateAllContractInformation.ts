@@ -50,7 +50,6 @@ export const generateAllContractInformation = async (
     if (newestVersionsRecord[detailType] === detailVersion) {
       throw `Contracts types error. Multiple ${detailType} contracts have been assigned the same version.`;
     }
-
     newestVersionsRecord = getUpdatedNewestVersionRecord(
       newestVersionsRecord,
       detailType,

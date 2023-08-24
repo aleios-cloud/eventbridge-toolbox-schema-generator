@@ -1,8 +1,10 @@
-import { describe, expect, it, vi } from "vitest";
+import { MockedFunction, describe, expect, it, vi } from "vitest";
 import {
+  generateAllContractInformation,
   getContractFileNames,
   getUpdatedNewestVersionRecord,
 } from "../../helpers/generateAllContractInformation";
+import { generateSchemaDetails } from "../../helpers/generateSchemaDetails";
 
 const { mockReaddir } = vi.hoisted(() => ({
   mockReaddir: vi.fn(),
@@ -16,6 +18,32 @@ vi.mock("fs/promises", async () => {
     readdir: mockReaddir,
   };
 });
+
+vi.mock("../../helpers/generateSchemaDetails");
+const mockGenerateSchemaDetails = generateSchemaDetails as MockedFunction<
+  typeof generateSchemaDetails
+>;
+
+const mockSchemaDetails = {
+  detailType: "mockDetailTypeConst",
+  detailVersion: 100,
+  schema: {
+    properties: {
+      "detail-type": {
+        const: "mockDetailTypeConst",
+      },
+      detail: {
+        properties: {
+          "detail-version": {
+            const: 100,
+          },
+        },
+      },
+    },
+  },
+};
+
+mockGenerateSchemaDetails.mockReturnValue(mockSchemaDetails);
 
 describe("Given a generate docs script", () => {
   describe("With function getContractFileNames to get files with a file name containing the term 'contract'", () => {
@@ -63,10 +91,27 @@ describe("Given a generate docs script", () => {
     });
   });
 
-  //   describe("Which generates contract information by reading contract files", () => {
-  //     it("Returns an array of all schemas and the record of the newest version", async () => {
-  //       mockReaddir.mockResolvedValueOnce(['singleMockFileName']);
+  describe("Which generates contract information by reading contract files", () => {
+    it("Returns an array of all schemas and the record of the newest version if input is valid", async () => {
+      mockReaddir.mockResolvedValueOnce(["singleMockContractFileName"]);
+      expect(
+        await generateAllContractInformation("mockPathToContractsFolder")
+      ).toStrictEqual({
+        allSchemaDetails: [mockSchemaDetails],
+        newestVersionsRecord: { mockDetailTypeConst: 100 },
+      });
+    });
 
-  //     });
-  //   });
+    it("Throws an error if it detects duplicate schemas", async () => {
+      mockReaddir.mockResolvedValueOnce([
+        "mockContractFileNameOne",
+        "mockContractFileNameTwo",
+      ]);
+      expect(
+        async () => await generateAllContractInformation("mockPathToContractsFolder")
+      ).rejects.toThrow(
+        "Contracts types error. Multiple mockDetailTypeConst contracts have been assigned the same version."
+      );
+    });
+  });
 });
