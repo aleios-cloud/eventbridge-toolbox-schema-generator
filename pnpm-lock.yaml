@@ -12,6 +12,7 @@ specifiers:
   eslint-plugin-import: ^2.27.5
   eslint-plugin-prefer-arrow: ^1.2.3
   eslint-plugin-prettier: ^5.0.0
+  mock-fs: ^5.2.0
   rimraf: ^5.0.1
   ts-json-schema-generator: ^1.2.0
   ts-node: ^10.9.1
@@ -21,6 +22,7 @@ specifiers:
   vitest: ^0.34.1
 
 dependencies:
+  mock-fs: 5.2.0
   vite-tsconfig-paths: 4.2.0_typescript@5.1.6
 
 devDependencies:
@@ -2014,6 +2016,11 @@ packages:
       pkg-types: 1.0.3
       ufo: 1.2.0
     dev: true
+
+  /mock-fs/5.2.0:
+    resolution: {integrity: sha512-2dF2R6YMSZbpip1V1WHKGLNjr/k48uQClqMVb5H3MOvwc9qhYis3/IWbj02qIg/Y8MDXKFF4c5v0rxx2o6xTZw==}
+    engines: {node: '>=12.0.0'}
+    dev: false
 
   /ms/2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
