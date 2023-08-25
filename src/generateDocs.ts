@@ -1,47 +1,46 @@
 import path from "path";
 
-import { writeDocumentation } from "./helpers/writeDocumentation.js";
 import { generateAllContractInformation } from "./helpers/generateAllContractInformation.js";
-
+import { writeDocumentation } from "./helpers/writeDocumentation.js";
 
 export const getVersionedDocumentationFilePath = (
   pathToDocumentationFolder: string,
   detailType: string,
-  detailVersion: number
-) =>
+  detailVersion: number,
+): string =>
   path.join(
-    `${pathToDocumentationFolder}/${detailType}/versioned/${detailVersion}`
+    `${pathToDocumentationFolder}/${detailType}/versioned/${detailVersion}`,
   );
 
 export const getUnversionedDocumentationFilePath = (
   pathToDocumentationFolder: string,
-  detailType: string
-) => path.join(`${pathToDocumentationFolder}/${detailType}`);
+  detailType: string,
+): string => path.join(`${pathToDocumentationFolder}/${detailType}`);
 
 export const generateDocumentation = async (
   pathToContractsFolder: string,
-  pathToDocumentationFolder: string
+  pathToDocumentationFolder: string,
 ): Promise<void> => {
   const { allSchemaDetails, newestVersionsRecord } =
     await generateAllContractInformation(pathToContractsFolder);
 
-  allSchemaDetails.forEach((schemaDetails) => {
+  allSchemaDetails.map(async (schemaDetails) => {
     const newestVersionOfContract =
       newestVersionsRecord[schemaDetails.detailType];
 
-    if (newestVersionOfContract == schemaDetails.detailVersion) {
+    if (newestVersionOfContract === schemaDetails.detailVersion) {
       const newDocumentationFilePath = getUnversionedDocumentationFilePath(
         pathToDocumentationFolder,
-        schemaDetails.detailType
+        schemaDetails.detailType,
       );
-      writeDocumentation(schemaDetails, newDocumentationFilePath);
+      await writeDocumentation(schemaDetails, newDocumentationFilePath);
     } else {
       const oldDocumentationFilePath = getVersionedDocumentationFilePath(
         pathToDocumentationFolder,
         schemaDetails.detailType,
-        schemaDetails.detailVersion
+        schemaDetails.detailVersion,
       );
-      writeDocumentation(schemaDetails, oldDocumentationFilePath);
+      await writeDocumentation(schemaDetails, oldDocumentationFilePath);
     }
   });
 };

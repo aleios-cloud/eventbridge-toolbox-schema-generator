@@ -16,7 +16,7 @@ const hasDetailTypeConst = (field: object): field is DetailTypeSchemaType =>
   hasConst(field["detail-type"], "string");
 
 const hasDetailVersionConst = (
-  field: object
+  field: object,
 ): field is DetailVersionSchemaType => {
   if ("detail" in field && isObject(field.detail)) {
     if ("properties" in field.detail && isObject(field.detail.properties)) {
@@ -34,7 +34,7 @@ const hasDetailVersionConst = (
 };
 
 export const isValidJsonSchemaContract = (
-  contractSchema: object
+  contractSchema: object,
 ): contractSchema is ContractSchemaType => {
   if ("properties" in contractSchema && isObject(contractSchema.properties)) {
     if (
@@ -48,13 +48,13 @@ export const isValidJsonSchemaContract = (
   return false;
 };
 
-export const isInvalidDirectoryName = (detailType: string) => {
-  const containsLinuxReservedRegex = new RegExp(
-    /[<>:"/\\|?*\u0000-\u001F]/g
-  ).test(detailType);
+export const isInvalidDirectoryName = (detailType: string): boolean => {
+  const containsLinuxReservedRegex = new RegExp(/[<>:"/\\|?*]/g).test(
+    detailType,
+  );
 
   const containsWindowsReservedRegex = new RegExp(
-    /^(con|prn|aux|nul|com\d|lpt\d)$/i
+    /^(con|prn|aux|nul|com\d|lpt\d)$/i,
   ).test(detailType);
 
   const containsWhitespace = new RegExp(/[\s]/g).test(detailType);
