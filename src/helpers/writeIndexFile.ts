@@ -21,7 +21,7 @@ const eventMarkdownTemplate =
 export const writeIndexFile = async (
   pathToContractDocumentationFolder: string,
   detailType: string,
-  detailVersion: string,
+  detailVersion: number,
 ): Promise<void> => {
   const markdownWithName = eventMarkdownTemplate.replace(
     "//name//",
@@ -29,7 +29,7 @@ export const writeIndexFile = async (
   );
   const markdownWithVersion = markdownWithName.replace(
     "//version//",
-    detailVersion,
+    detailVersion.toString(),
   );
 
   await writeFile(

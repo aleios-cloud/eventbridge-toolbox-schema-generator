@@ -1,6 +1,6 @@
 export type SchemaDetails = {
   detailType: string;
-  detailVersion: string;
+  detailVersion: number;
   schema: ContractSchemaType;
 };
 

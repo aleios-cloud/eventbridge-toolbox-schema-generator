@@ -2,11 +2,11 @@
 import { existsSync } from "fs";
 import path from "path";
 
-import { generateDocumentation } from "./generate-docs.js";
+import { generateDocumentation } from "./generateDocs.js";
 
 const getValidFolderPath = (
   directoryPath: string,
-  directoryName: string,
+  directoryName: string
 ): string => {
   if (directoryPath === "") {
     throw `Please provide the path to your ${directoryName} as the argument.`;
@@ -22,17 +22,17 @@ const getValidFolderPath = (
 const main = async () => {
   const pathToContracts = getValidFolderPath(
     process.argv[2],
-    "contracts directory",
+    "contracts directory"
   );
   const pathToEventDocumentationFolder = getValidFolderPath(
     process.argv[3],
-    "documentation directory",
+    "documentation directory"
   );
 
   try {
     await generateDocumentation(
       pathToContracts,
-      pathToEventDocumentationFolder,
+      pathToEventDocumentationFolder
     );
     console.log("Successfully generated all docs");
   } catch (err) {

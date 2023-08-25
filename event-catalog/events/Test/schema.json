@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "detail-type": {
+      "type": "string",
+      "const": "Test"
+    },
+    "detail": {
+      "type": "object",
+      "properties": {
+        "detail-version": {
+          "type": "number",
+          "const": 1
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "test": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "test"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "detail-version",
+        "data"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "detail",
+    "detail-type"
+  ],
+  "additionalProperties": false,
+  "definitions": {}
+}

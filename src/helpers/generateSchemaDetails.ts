@@ -3,12 +3,12 @@ import { createGenerator } from "ts-json-schema-generator";
 
 //TODO: We have to use relative paths here as apparently ts-node doesn't support esm :(
 // I think we should investigate a proper fix for this.
-import { isValidJsonSchemaContract } from "./utils.js";
+import { isInvalidDirectoryName, isValidJsonSchemaContract } from "./utils.js";
 import { SchemaDetails } from "../types.js";
 
 export const generateSchemaDetails = (
   pathToContractsFolder: string,
-  contractFilename: string,
+  contractFilename: string
 ): SchemaDetails => {
   const pathToContractFile = path.join(pathToContractsFolder, contractFilename);
 
@@ -20,20 +20,23 @@ export const generateSchemaDetails = (
   };
 
   const contractSchema = createGenerator(typeToSchemaConfig).createSchema(
-    typeToSchemaConfig.type,
+    typeToSchemaConfig.type
   );
 
-  //TODO: validate that detailType would be a valid filename
   if (isValidJsonSchemaContract(contractSchema)) {
+    if (
+      isInvalidDirectoryName(contractSchema.properties["detail-type"].const)
+    ) {
+      throw `Contracts types error. Detail type for file ${contractFilename} must be a valid directory name.`;
+    }
+
     return {
       detailType: contractSchema.properties["detail-type"].const,
       detailVersion:
-        contractSchema.properties.detail.properties[
-          "detail-version"
-        ].const.toString(),
+        contractSchema.properties.detail.properties["detail-version"].const,
       schema: contractSchema,
     };
   } else {
-    throw "Contracts types are incorrect. A const value must be set for 'detail-type' and 'detail-version'.";
+    throw `Contracts types error. File ${contractFilename} does not contain a const value for both 'detail-type' and 'detail-version'.`;
   }
 };
