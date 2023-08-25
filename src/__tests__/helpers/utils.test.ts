@@ -40,6 +40,16 @@ export const createJsonObject = (partialData?: object): object => ({
   },
 });
 
+const createJsonObjectWithDefinitions = (partialData?: object): object => ({
+  definitions: {
+    ContractSchemaType: {
+      properties: {
+        ...partialData,
+      },
+    },
+  },
+});
+
 describe("Given a set of utils functions", () => {
   describe("We can validate a jsonSchema", () => {
     it("Returns true if given a jsonObject contains required fields", () => {
@@ -48,8 +58,8 @@ describe("Given a set of utils functions", () => {
           createJsonObject({
             ...validDetailVersionSchema,
             ...validDetailTypeSchema,
-          }),
-        ),
+          })
+        )
       ).toStrictEqual(true);
     });
 
@@ -58,8 +68,8 @@ describe("Given a set of utils functions", () => {
         isValidJsonSchemaContract(
           createJsonObject({
             ...validDetailTypeSchema,
-          }),
-        ),
+          })
+        )
       ).toStrictEqual(false);
     });
 
@@ -68,8 +78,8 @@ describe("Given a set of utils functions", () => {
         isValidJsonSchemaContract(
           createJsonObject({
             ...validDetailVersionSchema,
-          }),
-        ),
+          })
+        )
       ).toStrictEqual(false);
     });
 
@@ -79,8 +89,8 @@ describe("Given a set of utils functions", () => {
           createJsonObject({
             ...validDetailVersionSchema,
             ...invalidDetailTypeSchema,
-          }),
-        ),
+          })
+        )
       ).toStrictEqual(false);
     });
 
@@ -90,8 +100,21 @@ describe("Given a set of utils functions", () => {
           createJsonObject({
             ...invalidDetailVersionSchema,
             ...validDetailTypeSchema,
-          }),
-        ),
+          })
+        )
+      ).toStrictEqual(false);
+    });
+
+    it("Returns false if given a jsonObject contains definitions", () => {
+      expect(
+        isValidJsonSchemaContract(
+          createJsonObjectWithDefinitions(
+            createJsonObject({
+              ...validDetailVersionSchema,
+              ...validDetailTypeSchema,
+            })
+          )
+        )
       ).toStrictEqual(false);
     });
   });

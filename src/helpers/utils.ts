@@ -16,7 +16,7 @@ const hasDetailTypeConst = (field: object): field is DetailTypeSchemaType =>
   hasConst(field["detail-type"], "string");
 
 const hasDetailVersionConst = (
-  field: object,
+  field: object
 ): field is DetailVersionSchemaType => {
   if ("detail" in field && isObject(field.detail)) {
     if ("properties" in field.detail && isObject(field.detail.properties)) {
@@ -38,12 +38,12 @@ export const isValidJsonSchemaContract = (
 ): contractSchema is ContractSchemaType => {
   if ("properties" in contractSchema && isObject(contractSchema.properties)) {
     if (
-      !hasDetailTypeConst(contractSchema.properties) ||
-      !hasDetailVersionConst(contractSchema.properties)
+      hasDetailTypeConst(contractSchema.properties) &&
+      hasDetailVersionConst(contractSchema.properties)
     ) {
-      return false;
+      return true;
     }
   }
 
-  return true;
+  return false;
 };
