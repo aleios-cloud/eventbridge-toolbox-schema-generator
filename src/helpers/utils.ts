@@ -34,7 +34,7 @@ const hasDetailVersionConst = (
 };
 
 export const isValidJsonSchemaContract = (
-  contractSchema: object,
+  contractSchema: object
 ): contractSchema is ContractSchemaType => {
   if ("properties" in contractSchema && isObject(contractSchema.properties)) {
     if (
@@ -43,6 +43,31 @@ export const isValidJsonSchemaContract = (
     ) {
       return true;
     }
+  }
+
+  return false;
+};
+
+export const isInvalidDirectoryName = (detailType: string) => {
+  const containsLinuxReservedRegex = new RegExp(
+    /[<>:"/\\|?*\u0000-\u001F]/g
+  ).test(detailType);
+
+  const containsWindowsReservedRegex = new RegExp(
+    /^(con|prn|aux|nul|com\d|lpt\d)$/i
+  ).test(detailType);
+
+  const containsWhitespace = new RegExp(/[\s]/g).test(detailType);
+
+  if (
+    containsLinuxReservedRegex ||
+    containsWindowsReservedRegex ||
+    containsWhitespace ||
+    detailType.length > 255 ||
+    detailType === "." ||
+    detailType === ".."
+  ) {
+    return true;
   }
 
   return false;
