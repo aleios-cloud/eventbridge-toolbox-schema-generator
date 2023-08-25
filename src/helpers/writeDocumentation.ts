@@ -1,12 +1,13 @@
 import { mkdirSync } from "fs";
-import { SchemaDetails } from "src/types.js";
+
 import { writeIndexFile } from "./writeIndexFile.js";
 import { writeSchemaFile } from "./writeSchemaFile.js";
+import { SchemaDetails } from "../types.js";
 
 export const writeDocumentation = async (
   schemaDetails: SchemaDetails,
-  pathToContractDocumentationFolder: string
-) => {
+  pathToContractDocumentationFolder: string,
+): Promise<void> => {
   const { detailType, detailVersion, schema } = schemaDetails;
 
   mkdirSync(pathToContractDocumentationFolder, { recursive: true });
@@ -14,7 +15,7 @@ export const writeDocumentation = async (
   await writeIndexFile(
     pathToContractDocumentationFolder,
     detailType,
-    detailVersion
+    detailVersion,
   );
 
   await writeSchemaFile(pathToContractDocumentationFolder, schema);
