@@ -1,4 +1,5 @@
 import path from "path";
+
 import { createGenerator } from "ts-json-schema-generator";
 
 //TODO: We have to use relative paths here as apparently ts-node doesn't support esm :(
