@@ -1,6 +1,6 @@
 {
   "name": "@aleios-cloud/eventbridge-toolbox-schema-generator",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "repository": "https://github.com/aleios-cloud/eventbridge-toolbox.git",
