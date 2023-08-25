@@ -1,24 +1,23 @@
 import { readdir } from "fs/promises";
 
 import { generateSchemaDetails } from "./generateSchemaDetails.js";
-
 import { SchemaDetails } from "../types.js";
 
 //Note: contract file name must include term 'Contract' to be parsed
 export const getContractFileNames = async (
-  pathToContracts: string
+  pathToContracts: string,
 ): Promise<string[]> => {
   const files = await readdir(pathToContracts);
 
   return files.filter((fileName) =>
-    fileName.toLowerCase().includes("contract")
+    fileName.toLowerCase().includes("contract"),
   );
 };
 
 export const getUpdatedNewestVersionRecord = (
   newestVersionsRecord: Record<string, number>,
   detailType: string,
-  detailVersion: number
+  detailVersion: number,
 ): Record<string, number> => {
   if (
     !(detailType in newestVersionsRecord) ||
@@ -26,24 +25,25 @@ export const getUpdatedNewestVersionRecord = (
   ) {
     newestVersionsRecord[detailType] = detailVersion;
   }
+
   return newestVersionsRecord;
 };
 
 export const generateAllContractInformation = async (
-  pathToContractsFolder: string
+  pathToContractsFolder: string,
 ): Promise<{
   allSchemaDetails: SchemaDetails[];
   newestVersionsRecord: Record<string, number>;
 }> => {
   const contractFileNames = await getContractFileNames(pathToContractsFolder);
 
-  let allSchemaDetails: SchemaDetails[] = [];
+  const allSchemaDetails: SchemaDetails[] = [];
   let newestVersionsRecord: Record<string, number> = {};
 
   for (const contractFileName of contractFileNames) {
     const { detailType, detailVersion, schema } = generateSchemaDetails(
       pathToContractsFolder,
-      contractFileName
+      contractFileName,
     );
     allSchemaDetails.push({ detailType, detailVersion, schema });
 
@@ -53,7 +53,7 @@ export const generateAllContractInformation = async (
     newestVersionsRecord = getUpdatedNewestVersionRecord(
       newestVersionsRecord,
       detailType,
-      detailVersion
+      detailVersion,
     );
   }
 

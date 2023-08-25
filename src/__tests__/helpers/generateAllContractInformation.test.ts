@@ -1,16 +1,17 @@
-import { MockedFunction, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, type MockedFunction, vi } from "vitest";
+
 import {
   generateAllContractInformation,
   getContractFileNames,
   getUpdatedNewestVersionRecord,
-} from "../../helpers/generateAllContractInformation";
-import { generateSchemaDetails } from "../../helpers/generateSchemaDetails";
+} from "../../helpers/generateAllContractInformation.js";
+import { generateSchemaDetails } from "../../helpers/generateSchemaDetails.js";
 
 const { mockReaddir } = vi.hoisted(() => ({
   mockReaddir: vi.fn(),
 }));
 
-vi.mock("fs/promises", async () => {
+vi.mock("fs/promises", () => {
   return {
     readdir: mockReaddir,
   };
@@ -70,20 +71,24 @@ describe("Given a generate docs script", () => {
         getUpdatedNewestVersionRecord(
           { testContract: 10 },
           "testContract2",
-          100
-        )
+          100,
+        ),
       ).toStrictEqual({ testContract: 10, testContract2: 100 });
     });
 
     it("Returns an updated record if we have a newer version of the contract", () => {
       expect(
-        getUpdatedNewestVersionRecord({ testContract: 10 }, "testContract", 100)
+        getUpdatedNewestVersionRecord(
+          { testContract: 10 },
+          "testContract",
+          100,
+        ),
       ).toStrictEqual({ testContract: 100 });
     });
 
     it("Returns the same record if we do not have a newer contract or a new contract type", () => {
       expect(
-        getUpdatedNewestVersionRecord({ testContract: 10 }, "testContract", 1)
+        getUpdatedNewestVersionRecord({ testContract: 10 }, "testContract", 1),
       ).toStrictEqual({ testContract: 10 });
     });
   });
@@ -92,7 +97,7 @@ describe("Given a generate docs script", () => {
     it("Returns an array of all schemas and the record of the newest version if input is valid", async () => {
       mockReaddir.mockResolvedValueOnce(["singleMockContractFileName"]);
       expect(
-        await generateAllContractInformation("mockPathToContractsFolder")
+        await generateAllContractInformation("mockPathToContractsFolder"),
       ).toStrictEqual({
         allSchemaDetails: [mockSchemaDetails],
         newestVersionsRecord: { mockDetailTypeConst: 100 },
@@ -104,10 +109,10 @@ describe("Given a generate docs script", () => {
         "mockContractFileNameOne",
         "mockContractFileNameTwo",
       ]);
-      expect(
-        async () => await generateAllContractInformation("mockPathToContractsFolder")
+      await expect(
+        generateAllContractInformation("mockPathToContractsFolder"),
       ).rejects.toThrow(
-        "Contracts types error. Multiple mockDetailTypeConst contracts have been assigned the same version."
+        "Contracts types error. Multiple mockDetailTypeConst contracts have been assigned the same version.",
       );
     });
   });

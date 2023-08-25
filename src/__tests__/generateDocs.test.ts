@@ -1,32 +1,35 @@
-import { MockedFunction, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, type MockedFunction, vi } from "vitest";
+
 import {
-  generateDocumentation, getUnversionedDocumentationFilePath, getVersionedDocumentationFilePath,
-} from "../generateDocs";
-import { generateAllContractInformation } from "../helpers/generateAllContractInformation";
-import { writeDocumentation } from "../helpers/writeDocumentation";
+  generateDocumentation,
+  getUnversionedDocumentationFilePath,
+  getVersionedDocumentationFilePath,
+} from "../generateDocs.js";
+import { generateAllContractInformation } from "../helpers/generateAllContractInformation.js";
+import { writeDocumentation } from "../helpers/writeDocumentation.js";
 
 describe("Given a generate docs script", () => {
   describe("With function getUnversionedDocumentationFilePath to generate filepaths", () => {
-    it("Returns a filepath based on its input", async () => {
+    it("Returns a filepath based on its input", () => {
       expect(
         getUnversionedDocumentationFilePath(
           "mockPathToDocumentationFolder",
-          "mockDetailType"
-        )
+          "mockDetailType",
+        ),
       ).toStrictEqual("mockPathToDocumentationFolder/mockDetailType");
     });
   });
 
   describe("With function getVersionedDocumentationFilePath to generate filepaths", () => {
-    it("Returns a filepath based on input", async () => {
+    it("Returns a filepath based on input", () => {
       expect(
         getVersionedDocumentationFilePath(
           "mockPathToDocumentationFolder",
           "mockDetailType",
-          100
-        )
+          100,
+        ),
       ).toStrictEqual(
-        "mockPathToDocumentationFolder/mockDetailType/versioned/100"
+        "mockPathToDocumentationFolder/mockDetailType/versioned/100",
       );
     });
   });
@@ -68,11 +71,11 @@ describe("Given a generate docs script", () => {
       });
       await generateDocumentation(
         "mockPathToContractsFolder",
-        "mockPathToDocumentationFolder"
+        "mockPathToDocumentationFolder",
       );
       expect(mockWriteDocumentation).toBeCalledWith(
         mockSchemaDetails,
-        `mockPathToDocumentationFolder/mockDetailTypeConst/versioned/10`
+        `mockPathToDocumentationFolder/mockDetailTypeConst/versioned/10`,
       );
     });
 
@@ -83,11 +86,11 @@ describe("Given a generate docs script", () => {
       });
       await generateDocumentation(
         "mockPathToContractsFolder",
-        "mockPathToDocumentationFolder"
+        "mockPathToDocumentationFolder",
       );
       expect(mockWriteDocumentation).toBeCalledWith(
         mockSchemaDetails,
-        `mockPathToDocumentationFolder/mockDetailTypeConst`
+        `mockPathToDocumentationFolder/mockDetailTypeConst`,
       );
     });
   });

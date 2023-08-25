@@ -1,4 +1,5 @@
 import path from "path";
+
 import { createGenerator } from "ts-json-schema-generator";
 
 //TODO: We have to use relative paths here as apparently ts-node doesn't support esm :(
@@ -8,7 +9,7 @@ import { SchemaDetails } from "../types.js";
 
 export const generateSchemaDetails = (
   pathToContractsFolder: string,
-  contractFilename: string
+  contractFilename: string,
 ): SchemaDetails => {
   const pathToContractFile = path.join(pathToContractsFolder, contractFilename);
 
@@ -20,7 +21,7 @@ export const generateSchemaDetails = (
   };
 
   const contractSchema = createGenerator(typeToSchemaConfig).createSchema(
-    typeToSchemaConfig.type
+    typeToSchemaConfig.type,
   );
 
   if (isValidJsonSchemaContract(contractSchema)) {
