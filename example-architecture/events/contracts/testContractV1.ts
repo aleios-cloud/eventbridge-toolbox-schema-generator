@@ -1,4 +1,4 @@
-import { Contract } from "../../types";
+import { Contract } from "../../types.js";
 export interface Test extends Contract {
   "detail-type": "Test";
   detail: {
